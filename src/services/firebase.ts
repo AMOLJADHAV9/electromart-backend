@@ -26,7 +26,11 @@ try {
 
   if (hasValidCredentials && process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
     try {
-      const serviceAccount = require("../config/serviceAccountKey.json");
+      const serviceAccount = {
+        projectId: firebaseConfig.projectId,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      };
 
       app = admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
@@ -76,7 +80,7 @@ export const firebaseService = {
     if (!db) {
       throw new Error('Firestore is not available. Firebase is not properly configured.');
     }
-    
+
     try {
       const docRef = db.collection(collectionName).doc(docId);
       const doc = await docRef.get();
@@ -96,7 +100,7 @@ export const firebaseService = {
     if (!db) {
       throw new Error('Firestore is not available. Firebase is not properly configured.');
     }
-    
+
     try {
       const snapshot = await db.collection(collectionName).get();
       return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -112,7 +116,7 @@ export const firebaseService = {
     if (!db) {
       throw new Error('Firestore is not available. Firebase is not properly configured.');
     }
-    
+
     try {
       const snapshot = await db.collection(collectionName)
         .where('userId', '==', userId)
@@ -130,7 +134,7 @@ export const firebaseService = {
     if (!db) {
       throw new Error('Firestore is not available. Firebase is not properly configured.');
     }
-    
+
     try {
       const docRef = await db.collection(collectionName).add(data);
       return { id: docRef.id, ...data };
@@ -146,7 +150,7 @@ export const firebaseService = {
     if (!db) {
       throw new Error('Firestore is not available. Firebase is not properly configured.');
     }
-    
+
     try {
       await db.collection(collectionName).doc(docId).update(data);
       return { id: docId, ...data };
@@ -162,7 +166,7 @@ export const firebaseService = {
     if (!db) {
       throw new Error('Firestore is not available. Firebase is not properly configured.');
     }
-    
+
     try {
       await db.collection(collectionName).doc(docId).delete();
       return { success: true };
@@ -178,7 +182,7 @@ export const firebaseService = {
     if (!auth) {
       throw new Error('Firebase Auth is not available. Firebase is not properly configured.');
     }
-    
+
     try {
       const decodedToken = await auth.verifyIdToken(idToken);
       return decodedToken;
@@ -187,7 +191,7 @@ export const firebaseService = {
       throw error;
     }
   },
-  
+
   // Check if Firebase is properly configured
   isConfigured(): boolean {
     return isFirebaseConfigured && !!app && !!db && !!auth;
