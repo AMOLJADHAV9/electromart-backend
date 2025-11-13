@@ -1,0 +1,74 @@
+# ================================
+# Node
+# ================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ================================
+# Environment Files (VERY IMPORTANT)
+# ================================
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Backend config files
+config/serviceAccountKey.json
+*.key
+*.pem
+
+# ================================
+# Build Output
+# ================================
+dist/
+build/
+tmp/
+temp/
+.cache/
+out/
+
+# Vite / React
+.vite/
+vite.config.js.timestamp-*
+*.tsbuildinfo
+
+# Backend TS build
+backend/dist/
+dist/
+
+# ================================
+# Logs
+# ================================
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ================================
+# OS / Editor Files
+# ================================
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+
+# ================================
+# Optional
+# ================================
+*.local
+coverage/
+server.pid
+
+
+config/serviceAccountKey.json
+src/config/serviceAccountKey.json

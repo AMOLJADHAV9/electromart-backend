@@ -7,20 +7,20 @@ import path from 'path';
 dotenv.config();
 
 // Import routes
-import firebaseRoutes from './routes/firebase';
-import cloudinaryRoutes from './routes/cloudinary';
-import razorpayRoutes from './routes/razorpay';
+import firebaseRoutes from './src/routes/firebase';
+import cloudinaryRoutes from './src/routes/cloudinary';
+import razorpayRoutes from './src/routes/razorpay';
 
 // Import config
-import { serverConfig } from './config/index';
+import { serverConfig } from './src/config/index';
 
 // Import services to check configuration
-import { firebaseService } from './services/firebase';
-import { cloudinaryService } from './services/cloudinary';
-import { razorpayService } from './services/razorpay';
+import { firebaseService } from './src/services/firebase';
+import { cloudinaryService } from './src/services/cloudinary';
+import { razorpayService } from './src/services/razorpay';
 
 const getAllowedOrigins = (): string[] => {
-  const origins = process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://localhost:5173,https://your-frontend-domain.vercel.app';
+  const origins = process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://localhost:8080,https://your-frontend-domain.vercel.app';
   return origins.split(',').map(origin => origin.trim()).filter(Boolean);
 };
 

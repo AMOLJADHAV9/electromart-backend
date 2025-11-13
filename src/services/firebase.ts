@@ -26,11 +26,7 @@ try {
 
   if (hasValidCredentials && process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
     try {
-      const serviceAccount = {
-        projectId: firebaseConfig.projectId,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      };
+      const serviceAccount = require("../config/serviceAccountKey.json");
 
       app = admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
