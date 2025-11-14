@@ -20,7 +20,7 @@ import { cloudinaryService } from './src/services/cloudinary';
 import { razorpayService } from './src/services/razorpay';
 
 const getAllowedOrigins = (): string[] => {
-  const origins = process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://localhost:8080,https://your-frontend-domain.vercel.app';
+  const origins = process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://localhost:8080,https://electromart-frontend-omega.vercel.app';
   return origins.split(',').map(origin => origin.trim()).filter(Boolean);
 };
 
@@ -28,18 +28,29 @@ const getAllowedOrigins = (): string[] => {
 const app: Application = express();
 const port = serverConfig.port;
 
-// Middleware
+// Middleware for CORS
 const allowedOrigins = getAllowedOrigins();
+
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-      return;
+    // Allow non-browser tools (Postman, direct URL open)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
-    callback(new Error(`Origin ${origin} is not allowed by CORS policy`));
+
+    return callback(new Error(`Origin ${origin} is not allowed by CORS policy`));
   },
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
+
+// Explicitly handle OPTIONS (important for Render!)
+app.options("*", cors());
+
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
