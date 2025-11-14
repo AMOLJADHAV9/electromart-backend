@@ -47,8 +47,8 @@ app.use(cors({
   credentials: true,
 }));
 
-// Explicitly handle OPTIONS (important for Render!)
-app.options("*", cors());
+app.options("/", cors());
+app.options("/*", cors());
 
 
 app.use(express.json({ limit: '50mb' }));
