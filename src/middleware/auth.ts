@@ -76,3 +76,48 @@ export const authorizeAdmin = async (req: Request, res: Response, next: NextFunc
     });
   }
 };
+
+// Delivery authorization middleware
+export const authorizeDelivery = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    // First check if user is authenticated
+    if (!(req as any).user) {
+      res.status(401).json({ 
+        success: false, 
+        message: 'Authentication required' 
+      });
+      return;
+    }
+
+    const user = (req as any).user;
+    
+    // Check if user has delivery role
+    // This would typically check a custom claim or a database field
+    // For now, we'll check if the user has a delivery role in Firestore
+    try {
+      const userDoc: any = await firebaseService.getDocument('users', user.uid);
+      
+      if (!userDoc || userDoc.role !== 'delivery') {
+        res.status(403).json({ 
+          success: false, 
+          message: 'Delivery access required' 
+        });
+        return;
+      }
+      
+      next();
+    } catch (error) {
+      console.error('Error checking user role:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Authorization check failed' 
+      });
+    }
+  } catch (error: any) {
+    console.error('Authorization error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Authorization check failed' 
+    });
+  }
+};

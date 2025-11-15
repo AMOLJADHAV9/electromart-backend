@@ -107,6 +107,7 @@ export const firebaseController = {
       });
     }
   },
+  
 
   // Update a document
   async updateDocument(req: Request, res: Response): Promise<void> {

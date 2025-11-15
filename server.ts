@@ -1,8 +1,7 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
-
 // Load environment variables
 dotenv.config();
 
@@ -10,6 +9,7 @@ dotenv.config();
 import firebaseRoutes from './src/routes/firebase';
 import cloudinaryRoutes from './src/routes/cloudinary';
 import razorpayRoutes from './src/routes/razorpay';
+import deliveryRoutes from './src/routes/delivery';
 
 // Import config
 import { serverConfig } from './src/config/index';
@@ -31,11 +31,14 @@ app.use(cors({
 }));
 
 // OPTIONAL but recommended — handle OPTIONS globally
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction): void => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Headers", "*");
-  if (req.method === "OPTIONS") return res.sendStatus(200);
+  if (req.method === "OPTIONS") {
+    res.sendStatus(200);
+    return;
+  }
   next();
 });
 
@@ -46,6 +49,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/api/firebase', firebaseRoutes);
 app.use('/api/cloudinary', cloudinaryRoutes);
 app.use('/api/payment', razorpayRoutes);
+app.use('/api/delivery', deliveryRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
@@ -58,7 +62,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 
 // Test endpoint for orders
 app.get('/api/test-orders', (req: Request, res: Response) => {
-  const mockOrders = [ /* ... unchanged ... */ ];
+  const mockOrders: any[] = [ /* ... unchanged ... */ ];
   res.json({ success: true, data: mockOrders });
 });
 
@@ -84,7 +88,7 @@ if (serverConfig.nodeEnv === 'production') {
 }
 
 // Global error handler
-app.use((err: any, req: Request, res: Response, next: any) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error('Global error handler:', err);
   res.status(500).json({ 
     success: false, 
