@@ -33,8 +33,6 @@ export interface Order {
   };
   orderStatus: 'ORDER_PLACED' | 'PROCESSING' | 'SHIPPED' | 'OUT_FOR_DELIVERY' | 'DELIVERED' | 'CANCELLED';
   statusTimeline: OrderStatusTimeline[];
-  assignedDeliveryBoyId?: string;
-  estimatedDelivery?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,42 +62,4 @@ export interface OrderResponse {
   data?: Order;
   message?: string;
   error?: string;
-}
-
-// Delivery Boy model interface
-export interface DeliveryBoy {
-  uid: string;
-  name: string;
-  email: string;
-  phone: string;
-  vehicleType: string;
-  role: "delivery";
-  createdAt: Date;
-}
-
-// Extended Order interface for delivery functionality
-export interface DeliveryOrder extends Order {
-  assignedDeliveryBoyId?: string;
-  estimatedDelivery?: Date;
-}
-
-// Delivery Order response interface
-export interface DeliveryOrderResponse {
-  success: boolean;
-  data?: DeliveryOrder;
-  message?: string;
-  error?: string;
-}
-
-// Delivery Orders response interface
-export interface DeliveryOrdersResponse {
-  success: boolean;
-  data?: DeliveryOrder[];
-  message?: string;
-  error?: string;
-}
-
-// Status update request interface
-export interface StatusUpdateRequest {
-  status: 'shipped' | 'out_for_delivery' | 'delivered';
 }
